@@ -7,7 +7,8 @@ BPM=76
 ARRANGEMENTS=[
  ('soft-evening','Soft Evening Jazz','soft','jazz',76,['Cmaj9','Am9','Dm9','G13','Em9','A7b9','Dm9','Cmaj9'],[48,45,50,43,52,45,50,48]),
  ('blues','12-Bar Blues','blues','blues',92,['C7','F7','C7','C7','F7','F7','C7','A7','Dm7','G7','C7','G7'],[48,53,48,48,53,53,48,45,50,43,48,43]),
- ('circle','Circle of Fifths','circle','jazz',82,['Am7','Am7','Am7','Am7','Dm7','G7','Cmaj7','Fmaj7','Bm7b5','E7','Am7'],[45,45,45,45,50,43,48,53,47,52,45])]
+ ('circle','Circle of Fifths','circle','jazz',82,['Am7','Am7','Am7','Am7','Dm7','G7','Cmaj7','Fmaj7','Bm7b5','E7','Am7'],[45,45,45,45,50,43,48,53,47,52,45]),
+ ('bossa-evening','Evening Bossa','soft','bossa',108,['Cmaj9','Am9','Dm9','G13','Em9','A7b9','Dm9','Cmaj9'],[48,45,50,43,52,45,50,48])]
 CHORDS=ARRANGEMENTS[0][5]
 ROOTS=ARRANGEMENTS[0][6]
 BAR=240/BPM
