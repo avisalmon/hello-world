@@ -83,6 +83,31 @@
         "guitar": "audio/stems/circle-guitar.wav",
         "drums": "audio/stems/circle-drums.wav"
       }
+    },
+    {
+      "id": "bossa-evening-demo",
+      "title": "Evening Bossa \u2014 rendered demo",
+      "progression": "soft",
+      "style": "bossa",
+      "bpm": 108,
+      "bars": [
+        "Cmaj9",
+        "Am9",
+        "Dm9",
+        "G13",
+        "Em9",
+        "A7b9",
+        "Dm9",
+        "Cmaj9"
+      ],
+      "barSeconds": 2.2222222222222223,
+      "durationSeconds": 17.77777777777778,
+      "source": "Original procedural synthesis; no external samples",
+      "stems": {
+        "bass": "audio/stems/bossa-evening-bass.wav",
+        "guitar": "audio/stems/bossa-evening-guitar.wav",
+        "drums": "audio/stems/bossa-evening-drums.wav"
+      }
     }
   ]
 }
