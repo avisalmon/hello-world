@@ -31,14 +31,23 @@ def pluck(m,duration,kind):
         signal=sum(np.sin(2*np.pi*f*j*t)*np.exp(-t*(4+j*3))/(j**1.3) for j in range(1,7))
         env=(1-np.exp(-t*200))*np.exp(-t*7.8)
     return (signal*env).astype(np.float32)
-def brush(duration,accent):
-    count=round(duration*SR)
-    raw=rng.normal(0,1,count)
-    # low-energy colored noise with a smooth brush stroke envelope
-    smooth=np.convolve(raw,np.ones(7)/7,'same')
+def percussion(kind, duration, accent):
+    """Soft jazz-kit approximation: filtered noise, low kick and brushed snare."""
+    count=max(1,round(duration*SR))
     t=np.arange(count)/SR
-    env=np.sin(np.pi*np.minimum(t/duration,1))**2
-    return (smooth*env*accent).astype(np.float32)
+    noise=rng.normal(0,1,count)
+    if kind=='kick':
+        phase=2*np.pi*(64*t+48*(1-np.exp(-t*38))/38)
+        tone=np.sin(phase)*np.exp(-t*23)
+        click=np.diff(np.r_[0,noise])*np.exp(-t*150)*.012
+        return ((tone*.7+click)*accent).astype(np.float32)
+    if kind=='hat':
+        high=noise-np.convolve(noise,np.ones(19)/19,'same')
+        return (high*np.exp(-t*72)*accent*.11).astype(np.float32)
+    # Rounded, low-volume snare brush: broad sweep instead of a sharp noise burst.
+    smooth=np.convolve(noise,np.ones(11)/11,'same')
+    envelope=(1-np.exp(-t*90))*np.exp(-t*20)
+    return (smooth*envelope*accent*.28).astype(np.float32)
 catalog={'version':1,'description':'Original procedurally rendered demonstration stems, not AI-generated acoustic performances','tracks':[]}
 os.makedirs('audio/stems',exist_ok=True)
 for slug,title,progression,style,bpm,chords,roots in ARRANGEMENTS:
@@ -63,9 +72,13 @@ for slug,title,progression,style,bpm,chords,roots in ARRANGEMENTS:
                 add('guitar',base+b*beat+j*.014+.018,pluck(root+12+interval,.26,'guitar'),(.039 if b==1 else .047)*(1+.07*math.sin(bar*2+j)))
         for eighth in range(8):
             swing=(.12*beat if eighth%2 else 0) if style!='bossa' else 0
-            add('drums',base+eighth*beat/2+swing,brush(.11,.28 if eighth%2 else .44),.23)
+            velocity=.64 if eighth%2 else .9
+            add('drums',base+eighth*beat/2+swing,
+                percussion('hat',.085,velocity),.22)
+        for b in (0,2):
+            add('drums',base+b*beat,percussion('kick',.22,.8),.16)
         for b in (1,3):
-            add('drums',base+b*beat,brush(.18,.85),.26)
+            add('drums',base+b*beat,percussion('snare',.23,.7),.17)
     for name,a in stems.items():
         peak=max(1,float(np.max(np.abs(a)))/.85)
         pcm=(np.clip(a/peak,-1,1)*32767).astype('<i2')
