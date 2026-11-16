@@ -1,0 +1,60 @@
+#!/usr/bin/env python3
+"""Render original, deterministic, independently mixable demo stems; no external samples."""
+import json, math, os, wave
+import numpy as np
+SR=16000
+BPM=76
+CHORDS=['Cmaj9','Am9','Dm9','G13','Em9','A7b9','Dm9','Cmaj9']
+ROOTS=[48,45,50,43,52,45,50,48]
+BAR=240/BPM
+N=round(len(CHORDS)*BAR*SR)
+rng=np.random.default_rng(42)
+stems={k:np.zeros(N,dtype=np.float32) for k in ('bass','guitar','drums')}
+def add(track,start,sound,volume=1):
+    p=round(start*SR)
+    if p>=N:return
+    length=min(len(sound),N-p)
+    if length>0:stems[track][p:p+length]+=sound[:length]*volume
+def hz(m):return 440*2**((m-69)/12)
+def pluck(m,duration,kind):
+    t=np.arange(max(1,round(duration*SR)))/SR
+    f=hz(m)
+    if kind=='bass':
+        signal=np.sin(2*np.pi*f*t)+.32*np.sin(4*np.pi*f*t)*np.exp(-t*8)+.12*np.sin(6*np.pi*f*t)*np.exp(-t*14)
+        env=(1-np.exp(-t*130))*np.exp(-t*3.5)
+    else:
+        signal=sum(np.sin(2*np.pi*f*j*t)*np.exp(-t*(4+j*3))/j for j in range(1,7))
+        env=(1-np.exp(-t*200))*np.exp(-t*7)
+    return (signal*env).astype(np.float32)
+def brush(duration,accent):
+    count=round(duration*SR)
+    raw=rng.normal(0,1,count)
+    # low-energy colored noise with a smooth brush stroke envelope
+    smooth=np.convolve(raw,np.ones(7)/7,'same')
+    t=np.arange(count)/SR
+    env=np.sin(np.pi*np.minimum(t/duration,1))**2
+    return (smooth*env*accent).astype(np.float32)
+for bar,root in enumerate(ROOTS):
+    base=bar*BAR
+    beat=60/BPM
+    for b in range(4):
+        note=root-12+([0,7,0,4][b])
+        add('bass',base+b*beat,pluck(note,.48,'bass'),.29)
+    minor=CHORDS[bar].startswith(('Am','Dm','Em'))
+    intervals=[0,3 if minor else 4,7,10]
+    for b in (1,3):
+        for j,interval in enumerate(intervals[1:]):
+            add('guitar',base+b*beat+j*.012,pluck(root+12+interval,.30,'guitar'),.048)
+    for eighth in range(8):
+        add('drums',base+eighth*beat/2,brush(.11,.28 if eighth%2 else .44),.23)
+    for b in (1,3):
+        add('drums',base+b*beat,brush(.18,.85),.26)
+os.makedirs('audio/stems',exist_ok=True)
+for name,a in stems.items():
+    peak=max(1,float(np.max(np.abs(a)))/.85)
+    pcm=(np.clip(a/peak,-1,1)*32767).astype('<i2')
+    with wave.open('audio/stems/soft-evening-'+name+'.wav','wb') as w:
+        w.setnchannels(1);w.setsampwidth(2);w.setframerate(SR);w.writeframes(pcm.tobytes())
+catalog={'version':1,'description':'Original procedurally rendered demo stems, not AI-generated or acoustic recordings','tracks':[{'id':'soft-evening-demo','title':'Soft Evening Jazz — rendered demo','progression':'soft','style':'jazz','bpm':BPM,'bars':CHORDS,'barSeconds':BAR,'durationSeconds':len(CHORDS)*BAR,'source':'Original procedural synthesis; no external samples','stems':{name:'audio/stems/soft-evening-'+name+'.wav' for name in stems}}]}
+with open('audio/catalog.json','w') as f:json.dump(catalog,f,indent=2)
+print('Generated',len(CHORDS),'bars; duration',len(CHORDS)*BAR,'seconds')
