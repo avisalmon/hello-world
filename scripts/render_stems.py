@@ -57,7 +57,7 @@ for slug,title,progression,style,bpm,chords,roots in ARRANGEMENTS:
             add('bass',base+b*beat+(0.012 if b%2 else 0),pluck(note,min(.58,beat*.85),'bass'),.27 if b else .31)
         minor=CHORDS[bar].startswith(('Am','Dm','Em','Bm'))
         intervals=[0,3 if minor else 4,6 if 'b5' in CHORDS[bar] else 7,10]
-        for b in (1,3):
+        for b in ((0,2) if style=='bossa' else (1,3)):
             for j,interval in enumerate(intervals[1:]):
                 add('guitar',base+b*beat+j*.014+.018,pluck(root+12+interval,.26,'guitar'),.039 if b==1 else .047)
         for eighth in range(8):
