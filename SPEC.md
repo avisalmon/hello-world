@@ -20,3 +20,14 @@ A browser-based interactive accompaniment ensemble for piano improvisation, host
 
 ## Implementation notes
 Keep independent tracks per instrument. Avoid requiring a server. Document any sample licenses before distribution. Do not claim realistic acoustic samples until actually integrated. GitHub Pages deployment requires repository Pages configuration or a suitable workflow.
+
+## Audio generation strategy — approved direction (2026-11-16)
+- Prioritize AI-generated, natural-sounding backing tracks over the current synthesized placeholder.
+- User accepts a generation wait (illustrative 20–60 seconds, **not a measured promise**).
+- Pre-generate and cache a library of common progressions, styles, and tempos so most playback can start immediately.
+- Keep independently mixable, synchronized bass, guitar, and drum stems. Evaluate separately generated stems versus full mix with source separation; verify musical alignment and artifact levels.
+- Store audio files and metadata (progression, key, BPM, style, bar boundaries, licensing/provenance, duration) in the repository or a static asset host; GitHub Pages itself cannot run AI generation jobs.
+- Custom progressions require an external generation service or offline generation/publishing pipeline; never claim arbitrary new music can be generated solely by the static page.
+- Playback: instant for cached assets; show progress for uncached generation. Changing tempo within a safe range may use time stretching, with quality trade-offs.
+- Before integrating a generator, verify API availability, cost, rights to distribute outputs, and feasibility of stem generation. Do not assume Suno has a usable API or provides stems.
+- Current synthesized playback remains a fallback until tested AI audio assets are available.
