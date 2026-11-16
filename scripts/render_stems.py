@@ -2,7 +2,7 @@
 """Render original, deterministic, independently mixable demo stems; no external samples."""
 import json, math, os, wave
 import numpy as np
-SR=16000
+SR=22050
 BPM=76
 ARRANGEMENTS=[
  ('soft-evening','Soft Evening Jazz','soft','jazz',76,['Cmaj9','Am9','Dm9','G13','Em9','A7b9','Dm9','Cmaj9'],[48,45,50,43,52,45,50,48]),
@@ -24,10 +24,10 @@ def pluck(m,duration,kind):
     t=np.arange(max(1,round(duration*SR)))/SR
     f=hz(m)
     if kind=='bass':
-        signal=np.sin(2*np.pi*f*t)+.32*np.sin(4*np.pi*f*t)*np.exp(-t*8)+.12*np.sin(6*np.pi*f*t)*np.exp(-t*14)
-        env=(1-np.exp(-t*130))*np.exp(-t*3.5)
+        signal=np.sin(2*np.pi*f*t)+.23*np.sin(4*np.pi*f*t)*np.exp(-t*8)+.08*np.sin(6*np.pi*f*t)*np.exp(-t*14)
+        env=(1-np.exp(-t*130))*np.exp(-t*2.8)
     else:
-        signal=sum(np.sin(2*np.pi*f*j*t)*np.exp(-t*(4+j*3))/j for j in range(1,7))
+        signal=sum(np.sin(2*np.pi*f*j*t)*np.exp(-t*(4+j*3))/(j**1.3) for j in range(1,7))
         env=(1-np.exp(-t*200))*np.exp(-t*7)
     return (signal*env).astype(np.float32)
 def brush(duration,accent):
