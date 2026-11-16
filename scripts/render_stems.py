@@ -25,11 +25,11 @@ def pluck(m,duration,kind):
     t=np.arange(max(1,round(duration*SR)))/SR
     f=hz(m)
     if kind=='bass':
-        signal=np.sin(2*np.pi*f*t)+.23*np.sin(4*np.pi*f*t)*np.exp(-t*8)+.08*np.sin(6*np.pi*f*t)*np.exp(-t*14)
+        signal=(np.sin(2*np.pi*f*t)+.23*np.sin(4*np.pi*f*t)*np.exp(-t*8)+.08*np.sin(6*np.pi*f*t)*np.exp(-t*14))*(1+.004*np.sin(2*np.pi*4.1*t))
         env=(1-np.exp(-t*130))*np.exp(-t*2.8)
     else:
         signal=sum(np.sin(2*np.pi*f*j*t)*np.exp(-t*(4+j*3))/(j**1.3) for j in range(1,7))
-        env=(1-np.exp(-t*200))*np.exp(-t*7)
+        env=(1-np.exp(-t*200))*np.exp(-t*7.8)
     return (signal*env).astype(np.float32)
 def brush(duration,accent):
     count=round(duration*SR)
@@ -55,12 +55,12 @@ for slug,title,progression,style,bpm,chords,roots in ARRANGEMENTS:
             nextroot=ROOTS[(bar+1)%len(ROOTS)]
             choices=[root,root+7,root+9,nextroot-1 if nextroot>=root else nextroot+1]
             note=choices[b]-12
-            add('bass',base+b*beat+(0.012 if b%2 else 0),pluck(note,min(.58,beat*.85),'bass'),.27 if b else .31)
+            add('bass',base+b*beat+(0.012 if b%2 else 0),pluck(note,min(.58,beat*.85),'bass'),(.27 if b else .31)*(1+.055*math.sin(bar*3+b*2)))
         minor=CHORDS[bar].startswith(('Am','Dm','Em','Bm'))
         intervals=[0,3 if minor else 4,6 if 'b5' in CHORDS[bar] else 7,10]
         for b in ((0,2) if style=='bossa' else (1,3)):
             for j,interval in enumerate(intervals[1:]):
-                add('guitar',base+b*beat+j*.014+.018,pluck(root+12+interval,.26,'guitar'),.039 if b==1 else .047)
+                add('guitar',base+b*beat+j*.014+.018,pluck(root+12+interval,.26,'guitar'),(.039 if b==1 else .047)*(1+.07*math.sin(bar*2+j)))
         for eighth in range(8):
             swing=(.12*beat if eighth%2 else 0) if style!='bossa' else 0
             add('drums',base+eighth*beat/2+swing,brush(.11,.28 if eighth%2 else .44),.23)
