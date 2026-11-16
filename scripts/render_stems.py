@@ -51,15 +51,18 @@ for slug,title,progression,style,bpm,chords,roots in ARRANGEMENTS:
         base=bar*BAR
         beat=60/BPM
         for b in range(4):
-            note=root-12+([0,7,0,4][b])
-            add('bass',base+b*beat,pluck(note,.48,'bass'),.29)
+            nextroot=ROOTS[(bar+1)%len(ROOTS)]
+            choices=[root,root+7,root+9,nextroot-1 if nextroot>=root else nextroot+1]
+            note=choices[b]-12
+            add('bass',base+b*beat+(0.012 if b%2 else 0),pluck(note,min(.58,beat*.85),'bass'),.27 if b else .31)
         minor=CHORDS[bar].startswith(('Am','Dm','Em','Bm'))
         intervals=[0,3 if minor else 4,6 if 'b5' in CHORDS[bar] else 7,10]
         for b in (1,3):
             for j,interval in enumerate(intervals[1:]):
-                add('guitar',base+b*beat+j*.012,pluck(root+12+interval,.30,'guitar'),.048)
+                add('guitar',base+b*beat+j*.014+.018,pluck(root+12+interval,.26,'guitar'),.039 if b==1 else .047)
         for eighth in range(8):
-            add('drums',base+eighth*beat/2,brush(.11,.28 if eighth%2 else .44),.23)
+            swing=(.12*beat if eighth%2 else 0) if style!='bossa' else 0
+            add('drums',base+eighth*beat/2+swing,brush(.11,.28 if eighth%2 else .44),.23)
         for b in (1,3):
             add('drums',base+b*beat,brush(.18,.85),.26)
     for name,a in stems.items():
