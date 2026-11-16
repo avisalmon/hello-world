@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "description": "Original procedurally rendered demo stems, not AI-generated or acoustic recordings",
+  "description": "Original procedurally rendered demonstration stems, not AI-generated acoustic performances",
   "tracks": [
     {
       "id": "soft-evening-demo",
@@ -25,6 +25,63 @@
         "bass": "audio/stems/soft-evening-bass.wav",
         "guitar": "audio/stems/soft-evening-guitar.wav",
         "drums": "audio/stems/soft-evening-drums.wav"
+      }
+    },
+    {
+      "id": "blues-demo",
+      "title": "12-Bar Blues \u2014 rendered demo",
+      "progression": "blues",
+      "style": "blues",
+      "bpm": 92,
+      "bars": [
+        "C7",
+        "F7",
+        "C7",
+        "C7",
+        "F7",
+        "F7",
+        "C7",
+        "A7",
+        "Dm7",
+        "G7",
+        "C7",
+        "G7"
+      ],
+      "barSeconds": 2.608695652173913,
+      "durationSeconds": 31.304347826086957,
+      "source": "Original procedural synthesis; no external samples",
+      "stems": {
+        "bass": "audio/stems/blues-bass.wav",
+        "guitar": "audio/stems/blues-guitar.wav",
+        "drums": "audio/stems/blues-drums.wav"
+      }
+    },
+    {
+      "id": "circle-demo",
+      "title": "Circle of Fifths \u2014 rendered demo",
+      "progression": "circle",
+      "style": "jazz",
+      "bpm": 82,
+      "bars": [
+        "Am7",
+        "Am7",
+        "Am7",
+        "Am7",
+        "Dm7",
+        "G7",
+        "Cmaj7",
+        "Fmaj7",
+        "Bm7b5",
+        "E7",
+        "Am7"
+      ],
+      "barSeconds": 2.926829268292683,
+      "durationSeconds": 32.19512195121951,
+      "source": "Original procedural synthesis; no external samples",
+      "stems": {
+        "bass": "audio/stems/circle-bass.wav",
+        "guitar": "audio/stems/circle-guitar.wav",
+        "drums": "audio/stems/circle-drums.wav"
       }
     }
   ]
