@@ -31,3 +31,12 @@ Keep independent tracks per instrument. Avoid requiring a server. Document any s
 - Playback: instant for cached assets; show progress for uncached generation. Changing tempo within a safe range may use time stretching, with quality trade-offs.
 - Before integrating a generator, verify API availability, cost, rights to distribute outputs, and feasibility of stem generation. Do not assume Suno has a usable API or provides stems.
 - Current synthesized playback remains a fallback until tested AI audio assets are available.
+
+## MVP scope decision — 2026-11-16
+**MVP is a static, ready-made backing-track library, NOT an on-demand generator.**
+- Deliver a sufficiently varied catalog of pre-rendered, realistic backing tracks stored as static audio assets in GitHub (or Git LFS / static hosting if repository limits require it).
+- Each catalog entry must contain synchronized, independently playable stems for bass, guitar, drums/percussion, plus machine-readable metadata: chord progression, style, BPM, key, bar timings, and source/rights.
+- UI lets users select tracks, mute/unmute instruments, change each stem's volume and master volume, and see synchronized chord changes. Tempo changes require compatible pre-rendered variants or high-quality time stretching.
+- Prioritize the three agreed progressions and cocktail jazz, blues, and bossa nova, with a useful range of tempos and arrangements. Expand the catalog as actual assets are generated and verified.
+- No live AI generation, paid API, or user-upload requirement in the MVP. Custom chord progression generation is a later phase; custom editing in the UI must not imply audio exists for arbitrary progressions.
+- Do not claim a backing track is ready until the corresponding playable audio stems have been generated, committed, and tested.
