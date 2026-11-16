@@ -1,5 +1,31 @@
 {
   "version": 1,
-  "description": "Catalog of pre-rendered synchronized backing-track stems. Entries are added only after audio assets exist and have been tested.",
-  "tracks": []
+  "description": "Original procedurally rendered demo stems, not AI-generated or acoustic recordings",
+  "tracks": [
+    {
+      "id": "soft-evening-demo",
+      "title": "Soft Evening Jazz \u2014 rendered demo",
+      "progression": "soft",
+      "style": "jazz",
+      "bpm": 76,
+      "bars": [
+        "Cmaj9",
+        "Am9",
+        "Dm9",
+        "G13",
+        "Em9",
+        "A7b9",
+        "Dm9",
+        "Cmaj9"
+      ],
+      "barSeconds": 3.1578947368421053,
+      "durationSeconds": 25.263157894736842,
+      "source": "Original procedural synthesis; no external samples",
+      "stems": {
+        "bass": "audio/stems/soft-evening-bass.wav",
+        "guitar": "audio/stems/soft-evening-guitar.wav",
+        "drums": "audio/stems/soft-evening-drums.wav"
+      }
+    }
+  ]
 }
