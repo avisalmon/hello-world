@@ -1,0 +1,15 @@
+name: Improvise original-audio integrity
+on:
+  push:
+    branches: [master]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  protect-original-demo:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run release integrity checks
+        run: python3 -m unittest discover -s tests -v
