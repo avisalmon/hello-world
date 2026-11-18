@@ -20,7 +20,7 @@ class ImproviseReleaseChecks(unittest.TestCase):
         self.assertGreater(len(data), 1_000_000, "Original embedded audio appears missing")
         # A size/marker check alone would accept a silently degraded recording.
         # Pin the *entire* original file, including its embedded audio, byte-for-byte.
-        blob = b"blob " + str(len(data)).encode("ascii") + b"\\0" + data
+        blob = b"blob " + str(len(data)).encode("ascii") + b"\0" + data
         self.assertEqual(hashlib.sha1(blob).hexdigest(), ORIGINAL_GIT_BLOB_SHA,
                          "Original recording/demo changed: restore the approved original")
         self.assertIn(b"<html", data.lower(), "Original demo is not HTML")
