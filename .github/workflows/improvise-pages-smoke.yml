@@ -1,0 +1,31 @@
+name: Improvise deployed-site smoke test
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '17 7 * * 1'
+permissions:
+  contents: read
+jobs:
+  pages-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check public GitHub Pages URLs and original recording
+        shell: bash
+        run: |
+          set -euo pipefail
+          base="https://avisalmon.github.io/hello-world"
+          # curl -L follows the default redirect; final URL must be the preserved demo.
+          effective="$(curl --fail --silent --show-error --location --retry 3 --retry-delay 3 --max-time 40 -o /tmp/improvise.html -w '%{url_effective}' "$base/")"
+          case "$effective" in
+            "$base/original.html") ;;
+            *) echo "Unexpected default destination: $effective"; exit 1 ;;
+          esac
+          test "$(wc -c < /tmp/improvise.html)" -gt 1000000 || {
+            echo "Original demo payload unexpectedly small"; exit 1;
+          }
+          grep -aiq 'audio/mpeg\|audio/mp3\|data:audio' /tmp/improvise.html || {
+            echo "No embedded audio marker in deployed demo"; exit 1;
+          }
+          echo "PASS: public default resolves to original.html with substantial embedded audio payload."
+          echo "NOTE: HTTP checks do not verify audio decoding, subjective quality, playback, looping or mobile support."
