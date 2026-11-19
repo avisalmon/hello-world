@@ -10,22 +10,21 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - name: Check public GitHub Pages URLs and original recording
+      - name: Check public GitHub Pages launcher and original recording
         shell: bash
         run: |
           set -euo pipefail
           base="https://avisalmon.github.io/hello-world"
-          # curl -L follows the default redirect; final URL must be the preserved demo.
-          effective="$(curl --fail --silent --show-error --location --retry 3 --retry-delay 3 --max-time 40 -o /tmp/improvise.html -w '%{url_effective}' "$base/")"
-          case "$effective" in
-            "$base/original.html") ;;
-            *) echo "Unexpected default destination: $effective"; exit 1 ;;
-          esac
-          test "$(wc -c < /tmp/improvise.html)" -gt 1000000 || {
+          curl --fail --silent --show-error --location --retry 3 --retry-delay 3 --max-time 40 "$base/" -o /tmp/improvise-index.html
+          grep -Fq './original.html' /tmp/improvise-index.html || {
+            echo "Default launcher no longer points to original.html"; exit 1;
+          }
+          curl --fail --silent --show-error --location --retry 3 --retry-delay 3 --max-time 60 "$base/original.html" -o /tmp/improvise-original.html
+          test "$(wc -c < /tmp/improvise-original.html)" -gt 1000000 || {
             echo "Original demo payload unexpectedly small"; exit 1;
           }
-          grep -aiq 'audio/mpeg\|audio/mp3\|data:audio' /tmp/improvise.html || {
+          grep -aiq 'audio/mpeg\|audio/mp3\|data:audio' /tmp/improvise-original.html || {
             echo "No embedded audio marker in deployed demo"; exit 1;
           }
-          echo "PASS: public default resolves to original.html with substantial embedded audio payload."
+          echo "PASS: public launcher links to original.html with substantial embedded audio payload."
           echo "NOTE: HTTP checks do not verify audio decoding, subjective quality, playback, looping or mobile support."
