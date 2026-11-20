@@ -14,7 +14,9 @@ A jazz accompaniment project for a **human pianist**: no piano accompaniment.
 
 Run `python3 -m unittest discover -s tests -v` to check that the preserved HTML, embedded-audio markers, default launcher and archived experimental interface remain in place. A GitHub Actions workflow also runs these checks on pushes and pull requests.
 
-A separate [deployed-site smoke test](.github/workflows/improvise-pages-smoke.yml) can be launched manually in GitHub Actions and also runs weekly. It checks that the public launcher points to the original recording and that the deployed HTML contains a substantial embedded-audio payload. This is an HTTP-level test, not a browser audio test.\n\nThese checks are **not proof** of musical quality, seamless looping, successful audio playback, or mobile/desktop behavior. Those require actual listening and browser/device testing.
+A separate [deployed-site smoke test](.github/workflows/improvise-pages-smoke.yml) can be launched manually in GitHub Actions and also runs weekly. It checks that the public launcher points to the original recording and that the deployed HTML contains a substantial embedded-audio payload. It also compares the deployed original HTML byte-for-byte against the preserved repository copy, catching stale or altered deployments. This is an HTTP-level test, not a browser audio test.
+
+These checks are **not proof** of musical quality, seamless looping, successful audio playback, or mobile/desktop behavior. Those require actual listening and browser/device testing.
 
 ## Next work
 
