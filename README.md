@@ -6,7 +6,7 @@ A jazz accompaniment project for a **human pianist**: no piano accompaniment.
 
 - [Open the GitHub Pages site](https://avisalmon.github.io/hello-world/)
 - [Original Soft Evening sampled demo](https://avisalmon.github.io/hello-world/original.html) — preserved unchanged and selected as the default by `index.html`.
-- [Previous experimental interface](https://avisalmon.github.io/hello-world/legacy_procedural_demo.html) — retained for reference, **not** the default.
+- [Acoustic Stem Lab](https://avisalmon.github.io/hello-world/stem_lab.html) — optional experimental player for three user-supplied, synchronized acoustic audio files. Includes independent mute/volume, master level, shared-clock start, loop fade and a tempo-based chord guide. No stems are bundled; not the default and not verified by live listening.\n- [Previous experimental interface](https://avisalmon.github.io/hello-world/legacy_procedural_demo.html) — retained for reference, **not** the default.
 
 **Musical quality comes first.** The original sampled recording is not to be replaced by simplistic synthesized accompaniment. The current original is a mixed recording; independently adjustable bass, guitar and drums will require suitable individual recordings/stems or a properly validated separation process. Do not describe synthetic controls as controlling the original mix.
 
